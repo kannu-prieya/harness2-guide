@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111a32">
+<script>document.documentElement.dataset.theme="dark";</script>
+<title>Harness² — Interactive Engineering Guide</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1320;--surface:#151e2e;--surface-2:#1b2638;--ink:#e8edf7;--muted:#a5b1c5;--line:#2b3850;--accent:#a6a2ff;--soft:#292747;--green:#65c6a4;--greenbg:#15352f;--amber:#f0bd69;--amberbg:#392d1c;--shadow:0 10px 28px rgba(0,0,0,.2);--r:17px;--reading:1160px}
+html[data-theme="dark"],html[data-theme="dark"] body{color-scheme:dark;}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0d1320;--surface:#151e2e;--surface-2:#1b2638;--ink:#e8edf7;--muted:#a5b1c5;--line:#2b3850;--accent:#a6a2ff;--soft:#292747;--green:#65c6a4;--greenbg:#15352f;--amber:#f0bd69;--amberbg:#392d1c;--shadow:0 10px 28px rgba(0,0,0,.2)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.72 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;transition:background .2s,color .2s}
+a{color:var(--accent);text-decoration:none;font-weight:650}a:hover{text-decoration:underline}
+header{background:linear-gradient(118deg,#111a32,#202b4b 58%,#37336f);color:white;padding:20px 26px 18px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:480px;height:480px;border:1px solid #ffffff24;border-radius:50%;right:-100px;top:-300px;box-shadow:0 0 0 38px #ffffff08,0 0 0 82px #ffffff06}
+.hero{max-width:1200px;margin:auto;position:relative;z-index:1}
+.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:800;color:#c9c5ff}
+h1{font-size:clamp(27px,3vw,36px);line-height:1.04;letter-spacing:-.045em;margin:4px 0;font-weight:820}
+header p{max-width:760px;color:#d8deed;font-size:13px;line-height:1.45;margin:5px 0 0}
+.tags{display:flex;gap:8px;flex-wrap:wrap}.tag{border:1px solid #ffffff35;background:#ffffff0d;border-radius:30px;padding:6px 12px;font-size:12px;color:#f0efff}
+main.page-layout{max-width:1760px;margin:0 auto;padding:20px 18px 56px;display:grid;grid-template-columns:255px minmax(0,1fr);gap:24px;align-items:start}
+.side-nav{position:sticky;top:22px;height:calc(100vh - 44px);max-height:calc(100vh - 44px);overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;padding:17px 14px 18px 0;border-right:1px solid var(--line)}
+
+.side-nav{scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
+.side-nav::-webkit-scrollbar{width:6px}
+.side-nav::-webkit-scrollbar-thumb{background:var(--line);border-radius:8px}
+.side-nav::-webkit-scrollbar-track{background:transparent}
+
+.section-tabs{max-width:1760px;margin:0 auto;padding:12px 18px 0;display:flex;gap:8px;overflow-x:auto}
+.section-tab{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:11px 11px 0 0;padding:11px 17px;font-size:12px;font-weight:800;white-space:nowrap}
+.section-tab span{margin-left:6px}
+.section-tab.active{background:var(--soft);color:var(--accent);border-color:var(--accent);border-bottom-color:var(--soft)}
+.nav-context[hidden]{display:none!important}
+.nav-context .nav-group{border-top:0;margin-top:0}
+
+.intro-flow-card h2{margin:0 0 5px;font-size:19px}
+.intro-flow-card>p{margin:0;color:var(--muted);font-size:13px}
+.h2-flow{margin-top:17px;display:grid;gap:12px}
+.h2-flow-lane{border:1px solid var(--line);background:var(--surface-2);border-radius:14px;padding:14px}
+.h2-flow-label{font-size:10px;letter-spacing:.12em;font-weight:850;color:var(--accent);margin-bottom:10px}
+.h2-flow-steps{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:stretch}
+.h2-flow-two{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr)}
+.h2-flow-step{min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:11px;padding:11px}
+.h2-flow-step b{display:block;font-size:12px;margin-bottom:4px}
+.h2-flow-step span{display:block;color:var(--muted);font-size:11px;line-height:1.5}
+.h2-flow-arrow{align-self:center;color:var(--accent);font-size:17px;font-weight:800}
+.h2-flow-bridge{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:11px;text-align:center}
+.h2-flow-bridge b{color:var(--accent);font-size:18px}
+@media(max-width:900px){.h2-flow-steps,.h2-flow-two{grid-template-columns:1fr}.h2-flow-arrow{transform:rotate(90deg);justify-self:center;line-height:1}}
+@media(max-width:560px){.h2-flow-lane{padding:11px}.h2-flow-step{padding:10px}}
+.practice-route{border:1px solid var(--line);background:var(--surface-2);border-radius:15px;padding:18px 20px;margin:16px 0 20px}
+.practice-route h3{margin:0 0 6px;font-size:17px}
+.practice-route p{margin:5px 0;font-size:13px;line-height:1.65;color:var(--muted)}
+.route-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:13px 0}
+.route-step{padding:13px;border:1px solid var(--line);border-radius:12px;background:var(--surface);min-width:0}
+.route-step b,.route-step span,.route-step small{display:block}
+.route-step b{font-size:13px;color:var(--ink)}
+.route-step span{font-size:12px;line-height:1.5;margin:5px 0;color:var(--muted)}
+.route-step small{font-size:11px;color:var(--accent);font-weight:750}.route-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.route-actions button{padding:6px 9px;font-size:11px;border-radius:8px}
+.route-note{margin-top:12px!important}
+
+.nav-top{display:flex;align-items:center;justify-content:flex-start;gap:8px;margin:0 10px 15px}
+.nav-title{font-size:10px;font-weight:850;letter-spacing:.14em;color:var(--muted)}
+
+.nav-item,.nav-subitem{width:100%;display:flex;align-items:center;text-align:left;border:0;background:transparent;color:var(--muted);border-radius:9px;cursor:pointer;font:inherit;transition:background .15s,color .15s}
+.nav-item{gap:10px;padding:10px 11px;margin:3px 0;font-size:13px;font-weight:750}
+.nav-group{padding:9px 0 8px;margin:6px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.nav-group-title{display:flex;align-items:center;gap:10px;padding:5px 11px 8px;color:var(--ink);font-size:13px;font-weight:800}
+.nav-num{font-size:10px;letter-spacing:.05em;color:var(--muted);font-weight:850;min-width:20px}
+.nav-subgroup-label{padding:10px 10px 4px 40px;color:var(--muted);opacity:.78;font-size:9px;letter-spacing:.11em;font-weight:850}
+.nav-subitem{padding:7px 8px 7px 40px;margin:1px 0;font-size:12px;line-height:1.4}
+.nav-item:hover,.nav-subitem:hover{background:var(--surface-2);color:var(--ink)}
+.nav-subitem.active:hover{background:var(--soft);color:var(--accent)}
+.nav-item.active,.nav-subitem.active{
+ background:var(--soft);
+ color:var(--accent);
+ font-weight:900!important;
+ box-shadow:inset 3px 0 0 var(--accent);
+}
+.nav-subitem.active{padding-left:37px;text-shadow:0 0 .01px currentColor}
+.nav-item.active{font-weight:900!important}
+.nav-note{margin:18px 10px 0;font-size:11px;line-height:1.6;color:var(--muted)}
+.reading-column{min-width:0;max-width:none;width:100%;margin:0}
+.view-panel{display:none!important}.view-panel.active{display:block!important}.view-panel.hidden{display:none!important}
+#overview.active{display:grid!important;grid-template-columns:1fr;gap:15px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:25px 27px;box-shadow:var(--shadow);margin-bottom:17px}
+.card h2{font-size:22px;letter-spacing:-.025em;margin:0 0 9px;line-height:1.3}.card h3{font-size:17px;margin:0 0 7px}
+.muted{color:var(--muted)}.lead{font-size:20px;line-height:1.48;letter-spacing:-.025em;font-weight:720;margin:8px 0 13px}
+.callout,.recommend,.warning{padding:13px 16px;border-radius:0 11px 11px 0;margin:15px 0;line-height:1.65}
+.callout{background:var(--soft);border-left:3px solid var(--accent)}.recommend{background:var(--greenbg);border-left:3px solid var(--green)}.warning{background:var(--amberbg);border-left:3px solid var(--amber)}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:15px}
+.node{padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2);min-width:0}
+.node b{display:block;font-size:13px}.node small{color:var(--muted);display:block;line-height:1.5;margin-top:4px}.node em{font-style:normal;color:var(--accent);font-size:10px;font-weight:850;letter-spacing:.08em}
+.two-loops{display:grid;grid-template-columns:1fr 1fr;gap:12px}.loop{border:1px solid var(--line);border-radius:15px;padding:16px;background:var(--surface-2);min-width:0}
+.loop .label{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:800}.loop h3{margin:4px 0}.loop p{margin:5px 0;color:var(--muted);font-size:14px}
+.section-head{margin:0 0 6px;padding:0}.section-head h2{font-size:18px;letter-spacing:-.02em;margin:0;line-height:1.25}.section-head p{display:none}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:5px 0;background:var(--bg);border-bottom:1px solid var(--line);margin-bottom:9px}
+input[type=search],select,button{font:inherit;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);color:var(--ink)}
+input[type=search]{flex:1;min-width:190px}button{font-weight:650;cursor:pointer}button:hover{border-color:var(--accent);color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:white}
+.selected-topic-label{font-size:11px;color:var(--muted);margin:0 0 6px}
+.lesson-list{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+.lesson{border:1px solid var(--line);border-radius:15px;background:var(--surface);overflow:hidden;box-shadow:0 3px 12px #19264108;min-width:0}
+.lesson.open{border-color:var(--accent);box-shadow:0 9px 24px #413e9610}
+.lesson-head{display:grid;grid-template-columns:38px minmax(0,1fr) 30px;gap:12px;align-items:center;padding:16px 18px;cursor:pointer}
+.n{height:34px;width:34px;display:grid;place-items:center;background:var(--soft);color:var(--accent);border-radius:10px;font-weight:800;font-size:13px}
+.lt{font-weight:760;font-size:15px;line-height:1.4}.ls{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5}
+.arrow{background:var(--surface-2);border-radius:8px;text-align:center;color:var(--muted);transition:.2s}
+.lesson.open .arrow{transform:rotate(180deg)}
+.body{display:none;padding:7px 26px 22px 68px;border-top:1px solid var(--line)}.lesson.open .body{display:block}
+.body h4{margin:19px 0 5px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.body p,.body li{font-size:14px;line-height:1.78}.body ul{padding-left:19px;margin:6px 0}.body li{margin:5px 0}.body pre{max-width:100%}
+.lesson-foot{display:flex;gap:15px;flex-wrap:wrap;align-items:center;margin-top:15px;font-size:13px}
+.done{display:flex;gap:7px;align-items:center;color:var(--muted)}input[type=checkbox]{accent-color:var(--green);width:16px;height:16px}
+.tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px;min-width:590px}
+th,td{text-align:left;padding:10px 11px;border-bottom:1px solid var(--line);vertical-align:top}th{background:var(--surface-2);color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.07em}
+.component-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.component{padding:14px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2);min-width:0}
+.component b{display:block;font-size:14px}.component span{font-size:13px;color:var(--muted)}
+.kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.kpi{padding:15px;border:1px solid var(--line);border-radius:13px;background:var(--surface-2);min-width:0}
+.kpi strong{font-size:23px;display:block;letter-spacing:-.03em;color:var(--accent)}.kpi span{font-size:12px;color:var(--muted)}
+pre{overflow:auto;background:#111a2c;color:#e8edfa;padding:15px;border-radius:12px;font-size:12px;line-height:1.7;white-space:pre}
+.checks{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}.checks label{display:flex;align-items:flex-start;gap:9px;font-size:13px;line-height:1.6}
+footer{text-align:center;color:var(--muted);font-size:12px;line-height:1.8;margin:34px 0}
+.hidden{display:none!important}
+@media(max-width:980px){main.page-layout{grid-template-columns:220px minmax(0,1fr);gap:18px;padding:16px 12px 48px}.side-nav{top:12px;max-height:calc(100vh - 24px)}}
+@media(max-width:720px){
+ .section-tabs{padding:8px 9px 0;gap:6px}.section-tab{padding:10px 12px;font-size:11px}
+ .route-grid{grid-template-columns:1fr}
+ header{padding:15px 16px 14px}h1{font-size:29px}header p{font-size:12px}
+ main.page-layout{grid-template-columns:1fr;gap:13px;padding:10px 9px 36px}
+ .side-nav{position:sticky;top:8px;height:auto;max-height:44vh;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--surface);z-index:5}
+ .nav-top{margin-bottom:9px}.nav-group{display:grid;grid-template-columns:1fr;gap:0}.nav-group-title{grid-column:1/-1}
+ .nav-subgroup-label{grid-column:1;padding:8px 8px 3px}
+ .nav-subitem{padding:8px;font-size:11px}
+ .nav-item{padding:9px}
+ .card{padding:19px 17px;border-radius:15px}
+ .flow{grid-template-columns:1fr 1fr}.two-loops{grid-template-columns:1fr}
+ .toolbar{display:grid;grid-template-columns:1fr 1fr}.toolbar input,.toolbar select{grid-column:1/-1;width:100%;min-width:0}
+ .lesson-head{grid-template-columns:32px minmax(0,1fr) 25px;padding:14px 12px;gap:9px}
+ .n{width:31px;height:31px}.lt{font-size:14px}.ls{font-size:11px}.body{padding:4px 14px 18px}
+ .body p,.body li{font-size:14px;line-height:1.72}.lesson-foot{flex-direction:column;align-items:flex-start;gap:9px}
+ .component-grid,.checks{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr 1fr}.kpi{padding:10px}.kpi strong{font-size:18px}
+}
+@media(max-width:390px){h1{font-size:27px}.flow{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+@media print{.side-nav,.toolbar{display:none!important}.lesson .body{display:block!important}.lesson{break-inside:avoid;box-shadow:none}header{print-color-adjust:exact}main.page-layout{display:block;max-width:900px}.reading-column{max-width:none}}
+
+/* Compact single-row masthead: title and primary section navigation share one line. */
+header.compact-header{padding:10px 22px;background:linear-gradient(118deg,#111a32,#202b4b 58%,#37336f)}
+.topbar-inner{max-width:1760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:22px}
+.brand-lockup{display:flex;align-items:center;gap:12px;flex:0 0 auto;min-width:0}
+.brand-lockup .eyebrow{font-size:9px;letter-spacing:.13em;white-space:nowrap}
+.brand-lockup h1{font-size:24px;line-height:1;margin:0;white-space:nowrap}
+.brand-lockup h1 sup{font-size:.58em}
+header.compact-header .section-tabs{max-width:none;margin:0;padding:0;display:flex;align-items:center;justify-content:flex-end;gap:6px;overflow-x:auto}
+header.compact-header .section-tab{padding:9px 12px;border-radius:9px;border-color:#ffffff30;background:#ffffff0b;color:#d9deef;font-size:11px}
+header.compact-header .section-tab.active{background:#35345f;color:#fff;border-color:#a6a2ff}
+header.compact-header .section-tab span{margin-left:4px}
+@media(max-width:900px){
+ header.compact-header{padding:10px 14px}
+ .topbar-inner{gap:12px;flex-wrap:wrap}
+ .brand-lockup{gap:9px}
+ header.compact-header .section-tabs{justify-content:flex-start;width:100%}
+}
+@media(max-width:560px){
+ .brand-lockup .eyebrow{font-size:8px}
+ .brand-lockup h1{font-size:22px}
+ header.compact-header .section-tab{padding:8px 10px;font-size:10px}
+}
+
+
+/* Keep the decorative header artwork behind, and never interactive with, the section tabs. */
+header:after{pointer-events:none}
+header.compact-header .topbar-inner{position:relative;z-index:2}
+header.compact-header .section-tabs{position:relative;z-index:3;pointer-events:auto}
+header.compact-header .section-tab{position:relative;z-index:4;pointer-events:auto}
+
+
+.source-footer{max-width:1760px;margin:0 auto;padding:18px 24px 24px;border-top:1px solid var(--line);color:var(--muted);font-size:11px;line-height:1.65;text-align:center}
+.source-footer a{font-weight:700}
+@media(max-width:720px){.source-footer{padding:14px 12px 20px;font-size:10px}}
+
+
+.top-tools{display:flex;align-items:center;gap:8px;flex:1 1 280px;max-width:390px;min-width:180px;position:relative;z-index:5}
+.guide-search-wrap{position:relative;flex:1;min-width:0}
+.guide-search-wrap input{width:100%;height:36px;border:1px solid #ffffff35;border-radius:9px;background:#ffffff12;color:#fff;padding:0 12px 0 34px;font:inherit;font-size:12px;outline:none}
+.guide-search-wrap input::placeholder{color:#c8cee0}
+.guide-search-wrap input:focus{border-color:#b9b4ff;box-shadow:0 0 0 2px #a6a2ff35}
+.search-icon{position:absolute;left:11px;top:4px;color:#d8def0;font-size:20px;line-height:26px;pointer-events:none}
+.search-results{position:absolute;top:calc(100% + 7px);left:0;right:0;max-height:360px;overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 35px #0005;padding:6px;z-index:30}
+.search-results[hidden]{display:none!important}
+.search-result{display:block;width:100%;text-align:left;border:0;border-radius:8px;background:transparent;color:var(--ink);padding:9px 10px;cursor:pointer;font:inherit}
+.search-result:hover,.search-result:focus{background:var(--soft);outline:none}
+.search-result strong{display:block;font-size:12px;line-height:1.4}
+.search-result small{display:block;color:var(--muted);font-size:10px;margin-top:2px;line-height:1.4}
+.search-empty{padding:12px;color:var(--muted);font-size:12px}
+
+
+
+
+
+
+/* Reflow before the masthead runs out of horizontal space (e.g. embedded previews). */
+header.compact-header .section-tab{flex:0 0 auto;white-space:nowrap}
+@media(max-width:1450px){
+ .topbar-inner{flex-wrap:wrap;row-gap:9px}
+ .brand-lockup{order:1}
+ header.compact-header .section-tabs{order:2;flex:1 1 620px;min-width:0;width:auto;justify-content:flex-start;overflow-x:auto;padding-bottom:2px}
+ .top-tools{order:3;flex:1 1 100%;max-width:none;min-width:0}
+}
+@media(max-width:720px){
+ .top-tools{order:2;flex:1 1 100%;max-width:none}
+ header.compact-header .section-tabs{order:3;flex:1 1 100%;width:100%}
+}
+
+
+.practice-task .lesson-head{user-select:none}
+.practice-task .lesson-head:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+.practice-task.open .lesson-head .arrow{transform:rotate(180deg)}
+.practice-task .lesson-head .arrow{transition:transform .18s ease}
+
+</style>
+</head>
+<body>
+<header class="compact-header">
+ <div class="topbar-inner">
+  <div class="brand-lockup">
+   <div class="eyebrow">Interactive research guide</div>
+   <h1>Harness<sup>2</sup></h1>
+  </div>
+  <div class="top-tools">
+   <div class="guide-search-wrap">
+    <span class="search-icon" aria-hidden="true">⌕</span>
+    <input id="guideSearch" type="search" placeholder="Search the guide…" autocomplete="off" aria-label="Search the guide">
+    <div id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></div>
+   </div>
+  </div>
+  <nav class="section-tabs" aria-label="Main guide sections">
+   <button class="section-tab active" data-section="learning">01 <span>Learning guide</span></button>
+   <button class="section-tab" data-section="practice">02 <span>Practice tasks</span></button>
+   <button class="section-tab" data-section="checklist">03 <span>Production checklist</span></button>
+   <button class="section-tab" data-section="takeaway">04 <span>Key takeaways</span></button>
+  </nav>
+ </div>
+</header>
+<main class="page-layout">
+<aside class="side-nav" aria-label="Section index">
+ <div class="nav-top">
+  <div class="nav-title">SECTION INDEX</div>
+ </div>
+ <div class="nav-context" data-index="learning">
+  <div class="nav-group">
+   <div class="nav-group-title">LEARNING GUIDE</div>
+   <button class="nav-subitem" data-intro="true">00 · Introduction</button>
+   <div class="nav-subgroup-label">FOUNDATIONS</div>
+   <button class="nav-subitem" data-lesson="1">01 · Why Harness² exists</button>
+   <button class="nav-subitem" data-lesson="2">02 · The two harnesses</button>
+   <div class="nav-subgroup-label">CORE MECHANISM</div>
+   <button class="nav-subitem" data-lesson="3">03 · Propose–Probe–Compose</button>
+   <button class="nav-subitem" data-lesson="4">04 · Parallel vs sequential</button>
+   <button class="nav-subitem" data-lesson="5">05 · Experience library</button>
+   <div class="nav-subgroup-label">HARNESS ENGINEERING</div>
+   <button class="nav-subitem" data-lesson="6">06 · Editable components</button>
+   <button class="nav-subitem" data-lesson="7">07 · Evidence discipline</button>
+   <div class="nav-subgroup-label">EVALUATION & IMPLEMENTATION</div>
+   <button class="nav-subitem" data-lesson="8">08 · Experiments and results</button>
+   <button class="nav-subitem" data-lesson="9">09 · Limitations</button>
+   <button class="nav-subitem" data-lesson="10">10 · Explore the repository</button>
+  </div>
+ </div>
+ <div class="nav-context" data-index="practice" hidden>
+  <div class="nav-group">
+   <div class="nav-group-title">PRACTICE TASKS</div>
+   <div class="nav-subgroup-label">SESSION 1 · FOUNDATIONS</div>
+   <button class="nav-subitem" data-practice="0">P1 · Baseline harness</button>
+   <button class="nav-subitem" data-practice="1">P2 · Propose–Probe–Compose</button>
+   <div class="nav-subgroup-label">SESSION 2 · RECURSION & MEMORY</div>
+   <button class="nav-subitem" data-practice="2">P3 · Experience library</button>
+   <button class="nav-subitem" data-practice="3">P4 · Parallel vs sequential</button>
+   <div class="nav-subgroup-label">SESSION 3 · APPLY & INTEGRATE</div>
+   <button class="nav-subitem" data-practice="4">P5 · Incident root-cause agent</button>
+  </div>
+ </div>
+ <div class="nav-context" data-index="checklist" hidden>
+  <div class="nav-group">
+   <div class="nav-group-title">PRODUCTION CHECKLIST</div>
+   <div class="nav-subgroup-label">10 READINESS CHECKS</div>
+   <button class="nav-subitem" data-check="0">01 · Baselines & reproducibility</button>
+   <button class="nav-subitem" data-check="1">02 · Isolation & permissions</button>
+   <button class="nav-subitem" data-check="2">03 · Evidence for edits</button>
+   <button class="nav-subitem" data-check="3">04 · Verify reused facts</button>
+   <button class="nav-subitem" data-check="4">05 · Validate artifacts</button>
+   <button class="nav-subitem" data-check="5">06 · Regression testing</button>
+   <button class="nav-subitem" data-check="6">07 · Experience library quality</button>
+   <button class="nav-subitem" data-check="7">08 · Runtime budgets</button>
+   <button class="nav-subitem" data-check="8">09 · Promotion & rollback</button>
+   <button class="nav-subitem" data-check="9">10 · Secrets & untrusted code</button>
+  </div>
+ </div>
+ <div class="nav-context" data-index="takeaway" hidden>
+  <div class="nav-group">
+   <div class="nav-group-title">KEY TAKEAWAYS</div>
+   <div class="nav-subgroup-label">THE CORE MESSAGE</div>
+   <div class="nav-note">Summary, what to learn deeply, and what not to copy blindly.</div>
+  </div>
+ </div>
+</aside>
+<div class="reading-column">
+<section class="grid view-panel" id="introPanel" data-panel="learning">
+ <div class="card">
+  <h2>Introduction · The big idea</h2>
+  <p class="lead">Do not only improve the answer. Improve the system that produced it—and preserve evidence about what worked.</p>
+  <p class="muted">Harness² keeps the base model weights fixed. It adapts the surrounding execution harness—instructions, tools, memory, skills, delegation and runtime behavior—based on observed executions.</p>
+  <div class="callout"><b>Why “²”?</b> One loop improves the agent’s harness for the current task; a second loop improves the process used to improve that harness across future tasks.</div>
+ </div>
+ <div class="card intro-flow-card">
+  <h2>How the two loops fit together</h2>
+  <p class="muted">The first loop improves the harness for one task. The second loop turns evidence from that task into reusable experience for later tasks.</p>
+  <div class="h2-flow">
+   <div class="h2-flow-lane">
+    <div class="h2-flow-label">LOOP 1 · TASK-LEVEL ADAPTATION</div>
+    <div class="h2-flow-steps">
+     <div class="h2-flow-step"><b>1. Baseline</b><span>Run the task with the current harness H₀.</span></div>
+     <div class="h2-flow-arrow">→</div>
+     <div class="h2-flow-step"><b>2. Propose</b><span>Generate candidate harness changes.</span></div>
+     <div class="h2-flow-arrow">→</div>
+     <div class="h2-flow-step"><b>3. Probe</b><span>Run candidates and compare their behavior.</span></div>
+     <div class="h2-flow-arrow">→</div>
+     <div class="h2-flow-step"><b>4. Compose</b><span>Build the task-specific harness H* from supported changes.</span></div>
+    </div>
+   </div>
+   <div class="h2-flow-bridge"><span>Evidence from the task · what helped, what failed, and why</span><b>↓</b></div>
+   <div class="h2-flow-lane h2-flow-second">
+    <div class="h2-flow-label">LOOP 2 · CROSS-TASK IMPROVEMENT</div>
+    <div class="h2-flow-steps h2-flow-two">
+     <div class="h2-flow-step"><b>5. Reflect</b><span>Extract reusable lessons from the observed contrasts.</span></div>
+     <div class="h2-flow-arrow">→</div>
+     <div class="h2-flow-step"><b>6. Update experience</b><span>Improve the library that guides future harness edits.</span></div>
+     <div class="h2-flow-arrow">→</div>
+     <div class="h2-flow-step"><b>7. Next task</b><span>Use the improved improvement process to adapt a fresh H₀.</span></div>
+    </div>
+   </div>
+  </div>
+  <div class="callout"><b>Keep this distinction clear:</b> Loop 1 changes the execution harness for the current task. Loop 2 changes the experience used to improve harnesses on future tasks.</div>
+ </div>
+</section>
+
+
+
+<div class="card guide-prompt" id="guidePrompt">
+ <h2>Start with the foundations</h2>
+ <p class="muted">Choose a lesson from the section index on the left. Only that lesson will open here. Follow the lesson order for the clearest progression.</p>
+ <p class="muted" style="font-size:12px">Suggested reading time: 3–4 hours, including the repository walkthrough.</p>
+</div>
+<div class="lesson-list view-panel" id="lessons" data-panel="learning">
+<article class="lesson" data-id="1" data-cat="concept" data-search="open world unseen tasks no ground truth verifier harness static prompt optimization generalization problem">
+ <div class="lesson-head"><div class="n">01</div><div><div class="lt">Why Harness² exists: harness improvement in an open world</div><div class="ls">The problem the research is trying to solve</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>Agents face new tasks, domains, files, tools and constraints at runtime. A harness tuned in advance on a fixed set of tasks may not generalize. For an unseen task, there may be no answer key, labeled validation set or reliable verifier to tell the system whether an edit improved the result.</p>
+  <h4>What the paper conveys</h4><p>Agent quality depends on both the model and the harness around it. Harness² treats the harness as an editable object and adapts it at test time. The base model weights stay frozen; the system improves prompts, guardrails, memory, skills, tools, subagents, scripts and plugins instead.</p>
+  <h4>How it addresses the problem</h4><ul><li>Observe a baseline execution to see how the current harness behaves.</li><li>Propose different harness edits aimed at different kinds of weakness.</li><li>Run candidates on the same task under matched conditions.</li><li>Use differences in trajectories and deliverables as evidence—not as a ground-truth correctness score.</li><li>Retain only lessons supported by observed contrasts for future tasks.</li></ul>
+  <div class="callout"><b>Important distinction:</b> “No ground-truth verifier” does not mean “no evidence”. It means the method uses behavioral evidence from controlled comparisons, while acknowledging that this evidence is imperfect.</div>
+  <div class="recommend"><b>Recommendation:</b> Think of Harness² as test-time adaptation of the agent’s operating system, not model fine-tuning and not simply prompt rewriting.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#S1">Paper §1 ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="2" data-cat="concept" data-search="model plus harness execution harness improvement harness frozen weights two recursive objects">
+ <div class="lesson-head"><div class="n">02</div><div><div class="lt">The two harnesses: execution vs improvement</div><div class="ls">The naming distinction that makes the whole paper click</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>It is easy to confuse the harness being edited with the mechanism doing the editing. If both are called “the harness”, the architecture becomes difficult to reason about.</p>
+  <h4>What the paper conveys</h4><ul><li><b>Execution harness (H):</b> the actual runtime configuration used by the task-solving agent.</li><li><b>Improvement harness (R):</b> the editor/composer/reflector instructions and the accumulated library that guide how H is changed.</li></ul>
+  <p>The improvement harness stays fixed during the task-level recursion for the current task. After the task, its library is updated. The next task starts from the common initial execution harness H₀, but the improved library R now guides how it is adapted.</p>
+  <h4>How the two levels connect</h4>
+  <div class="two-loops">
+   <div class="loop"><div class="label">Level 1 · Current task</div><h3>Improve H</h3><p>Try candidate execution harnesses, compare their runs and compose a better task-specific H.</p></div>
+   <div class="loop"><div class="label">Level 2 · Future tasks</div><h3>Improve R</h3><p>Reflect on the evidence, then update the experience library used by the improvement process.</p></div>
+  </div>
+  <h4>How to reason about it</h4><p>Imagine a coding agent with a weak tool-use instruction. H is the collection of files that tell the coding agent how to work. R is the improvement process that diagnoses the tool-use failure, tests candidate instruction changes, chooses a supported edit and records the lesson.</p>
+  <div class="callout"><b>Not this:</b> The previous task’s entire custom harness is blindly carried into the next task.</div>
+  <div class="recommend"><b>Recommendation:</b> In your own architecture, name these objects explicitly—<code>execution_harness</code> and <code>improvement_harness</code>. Keep their state, permissions and versioning separate.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#S2">Paper §2 ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="3" data-cat="mechanics" data-search="propose probe compose contrastive invariant domain specific candidate baseline rollout matched execution trajectories compose selective">
+ <div class="lesson-head"><div class="n">03</div><div><div class="lt">Propose–Probe–Compose: the core improvement step</div><div class="ls">How the system tests harness changes without a verifier</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>A harness editor can generate a plausible improvement, but how can it know whether the change actually helped when there is no answer key? Editing based on intuition alone risks adding irrelevant rules or introducing regressions.</p>
+  <h4>Step 1 — Propose</h4><p>First run the baseline harness to obtain a reference trajectory and deliverable. Then generate two candidate harnesses:</p><ul><li><b>Invariant candidate:</b> targets general agent behavior such as planning, tool use, context management or delegation.</li><li><b>Domain-specific candidate:</b> targets professional knowledge, procedures and constraints relevant to this task/domain.</li></ul>
+  <h4>Step 2 — Probe</h4><p>Execute each candidate on the same task with the same model and environment configuration. Compare its trajectory and deliverable with the reference. Did it avoid a failure? Use a tool correctly? Produce a more complete artifact? Introduce a regression?</p>
+  <h4>Step 3 — Compose</h4><p>A composer inspects the reference, candidates, diffs and execution evidence. It may merge supported changes, revise conflicting edits, adopt one candidate, or keep the original harness. It then runs the composed harness and records the decision and evidence.</p>
+  <div class="callout"><b>Why “contrastive”?</b> The evidence comes from comparing what happened under different harness configurations, not from asking a hidden answer key to score the task.</div>
+  <div class="warning"><b>Do not overclaim:</b> A better-looking trajectory is not proof of correctness. The paper explicitly notes stochastic execution and shared model biases can make behavioral contrasts misleading.</div>
+  <div class="recommend"><b>Recommendation:</b> Every proposed edit should point to a specific moment in a trajectory and explain how that edit would have changed the behavior. If you cannot identify the moment, the edit is probably speculative.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#S2.SS2">Paper §2.2 ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="4" data-cat="mechanics" data-search="parallel sequential recursion k budget width depth candidates exploration tradeoff">
+ <div class="lesson-head"><div class="n">04</div><div><div class="lt">Parallel vs sequential recursion</div><div class="ls">Two ways to spend the refinement budget k</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>One propose–probe–compose step may not explore enough alternatives. The framework needs a way to spend more inference and execution budget to improve the task-specific harness.</p>
+  <h4>Parallel recursion — explore wider</h4><p>Collect baseline executions, create multiple invariant and domain-specific candidates, probe them, then run multiple independent composition sessions over the candidate pool. Each composition produces and executes a successor harness. In the paper’s implementation, k controls the width of one population update.</p>
+  <h4>Sequential recursion — refine deeper</h4><p>Run a contrastive step, carry its refined harness and accumulated evidence forward, then run the next step on that updated state. Later rounds can retain, revise or correct earlier edits. Here k is the number of chained steps.</p>
+  <div class="tablewrap"><table><thead><tr><th>Dimension</th><th>Parallel</th><th>Sequential</th></tr></thead><tbody>
+  <tr><td>Search shape</td><td>Many candidates/compositions from a shared starting point</td><td>One evolving chain of refinements</td></tr>
+  <tr><td>Strength</td><td>Broader exploration and alternative combinations</td><td>Later steps can build on earlier discoveries</td></tr>
+  <tr><td>Risk</td><td>More concurrent compute; candidates may share blind spots</td><td>Early mistakes can influence later steps</td></tr>
+  <tr><td>Meaning of k</td><td>Exploration width</td><td>Number of successive steps</td></tr>
+  </tbody></table></div>
+  <div class="recommend"><b>Recommendation:</b> Start with k=1 to understand the basic loop. Increase k only when the task is valuable enough to justify the added model calls and execution cost. Choose parallel for breadth; sequential when iterative correction is useful.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#S2.SS2">Paper §2.2.2 ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="5" data-cat="mechanics" data-search="harnessing level recursion library experience md adopted harness reflection evidence transferable lessons reuse retrieval next tasks">
+ <div class="lesson-head"><div class="n">05</div><div><div class="lt">Harnessing-level recursion: learning across tasks</div><div class="ls">How one task’s refinement can help the next task</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>Task-specific harness edits can solve the current task but do not necessarily transfer. Simply copying the whole edited harness to a new task can carry stale assumptions and task-specific facts.</p>
+  <h4>What the paper conveys</h4><p>After returning the deliverable, a reflector reviews the full improvement record: baseline runs, candidate harnesses, probes, diffs, composition decisions and selected output. It extracts lessons about which changes addressed which deficiencies, in what conditions and with what consequences.</p>
+  <h4>What gets saved</h4><ul><li>The adopted executable harness.</li><li>An <code>EXPERIENCE.md</code> containing the situation where the lesson applies, what was learned and the supporting evidence.</li><li>An index so later sessions can find relevant entries on demand.</li></ul>
+  <p>The next task starts from H₀ again. The library guides proposals and composition; components are selectively reused or adapted, not automatically inherited.</p>
+  <div class="callout"><b>Example:</b> “When a browser task requires exporting a dynamically filtered view, recompute derived state after every filter change” is a reusable procedure. “The button on this one page is blue” is not.</div>
+  <div class="warning"><b>Key discipline:</b> Adoption does not prove an edit helped. The reflector should decline to add a reusable lesson when the execution evidence is insufficient.</div>
+  <div class="recommend"><b>Recommendation:</b> Treat the experience library as an evidence-backed engineering playbook, not a vector database of unverified tips. Store the cue, the actionable lesson and the traceable evidence.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#S2.S3">Paper §2.3 ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="6" data-cat="engineering" data-search="eight editable components system prompt guardrails memory tool guidance subagents skills scripts plugins middleware runtime">
+ <div class="lesson-head"><div class="n">06</div><div><div class="lt">The eight editable harness components</div><div class="ls">What the framework can actually change</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>If the harness is editable, what exactly is the editable surface? Treating everything as a prompt leads to bloated instructions and misses mechanisms that act inside the tool loop or support reusable workflows.</p>
+  <h4>What the paper and repository expose</h4><div class="component-grid">
+   <div class="component"><b>1. System prompt</b><span>Always-on role, objective and core operating instructions.</span></div>
+   <div class="component"><b>2. Guardrails</b><span>Constraints, invariants and behaviors that should not be violated.</span></div>
+   <div class="component"><b>3. Memory</b><span>Persistent facts or guidance that should inform later runs.</span></div>
+   <div class="component"><b>4. Tool guidance</b><span>How and when to use available tools, their inputs and expected outputs.</span></div>
+   <div class="component"><b>5. Subagents</b><span>Specialized delegated workers invoked for bounded tasks.</span></div>
+   <div class="component"><b>6. Skills</b><span>On-demand domain knowledge or repeatable multi-step procedures.</span></div>
+   <div class="component"><b>7. Scripts</b><span>Deterministic code for repeatable extraction, transformation or checks.</span></div>
+   <div class="component"><b>8. Plugins / middleware</b><span>Runtime hooks that can observe or constrain behavior inside the tool loop.</span></div>
+  </div>
+  <h4>How to choose the right lever</h4><ul><li>Use concise always-on text for truly universal behavior.</li><li>Use a skill for a triggered procedure or domain knowledge.</li><li>Use a script for deterministic repetitive work.</li><li>Use a subagent when independent bounded work benefits from delegation.</li><li>Use middleware only when repeated evidence shows a behavior needs an enforceable runtime hook.</li></ul>
+  <div class="recommend"><b>Recommendation:</b> Match the fix to the failure. Do not solve every observed problem by adding another paragraph to the system prompt.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#A3">Paper Appendix D ↗</a> · <a target="_blank" href="https://github.com/google-research/harness2">Repository ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="7" data-cat="engineering" data-search="evidence discipline trajectory divergence workspace facts scope generic advice overfit hallucinated facts component selection validation">
+ <div class="lesson-head"><div class="n">07</div><div><div class="lt">Evidence discipline: how to make useful harness edits</div><div class="ls">The practical engineering lessons hidden in the prompts</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>An improver can generate generic advice (“be thorough”), overfit to a one-off event, or encode a fact that was never verified. Such edits consume context and can damage future tasks.</p>
+  <h4>What the implementation emphasizes</h4><ul><li><b>Trace every edit to a trajectory moment.</b> State which run did what and how the proposed text would have changed it.</li><li><b>Prefer divergences.</b> If two runs behave differently, the model has demonstrated the capability; a targeted instruction may help it use that capability consistently.</li><li><b>Use repeated concrete failures.</b> A failure repeated across baseline runs is stronger evidence than a one-off anomaly.</li><li><b>Encode verified workspace facts directly.</b> If a file mapping or unit is established by evidence, state the fact and label its scope. Do not merely tell the agent to rediscover it.</li><li><b>Keep procedures reusable.</b> Store domain procedures at a scope where they remain valid, not one task’s peculiar facts.</li></ul>
+  <h4>Validation matters</h4><p>The released prompt describes hard rejection conditions: every skill needs a trigger in always-on text; named scripts must exist in the proper location; malformed template syntax can break rendering; a harness must preserve the requested deliverable format.</p>
+  <div class="warning"><b>Security note:</b> The paper prompts treat task materials, trajectories and candidate artifacts as data, not instructions. Candidate code is inspected as text; it must not be blindly executed by the improver. This is essential when harness edits can add executable scripts or plugins.</div>
+  <div class="recommend"><b>Recommendation:</b> Add schema validation, path validation, sandboxed execution, diff review and rollback before adopting a candidate in a production agent. Treat the improver as a privileged code-writing system.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#A8">Paper Appendix H ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="8" data-cat="evaluation" data-search="experiments benchmark WorkBuddy JobBench LAB results GLM Gemini 3.5 Flash up to gains k 5">
+ <div class="lesson-head"><div class="n">08</div><div><div class="lt">What the experiments show—and do not show</div><div class="ls">Understand the results without turning them into hype</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Evaluation setup</h4><p>The paper evaluates professional tasks across WorkBuddy-Bench (office, web and code), JobBench (long-horizon professional work) and Harvey’s Legal Agent Benchmark (LAB). It tests frozen GLM-5 and Gemini 3.5 Flash executors with OpenCode and Codex harness configurations. The default harness editor is Claude Opus 4.8 under OpenCode.</p>
+  <h4>Reported headline gains</h4><div class="kpi-grid">
+   <div class="kpi"><strong>+11.5</strong><span>WorkBuddy-Bench points, largest reported one-step gain</span></div>
+   <div class="kpi"><strong>+4.5</strong><span>JobBench points, reported maximum one-step gain</span></div>
+   <div class="kpi"><strong>+11.8 pp</strong><span>LAB partial pass-rate gain, reported maximum</span></div>
+  </div>
+  <p>Parallel recursion at k=5 adds further gains over a single step in the reported settings. The paper also finds reduced tool-error rates across its three benchmarks, although tool-call counts do not always decrease.</p>
+  <h4>What you should conclude</h4><ul><li>Harness changes can materially affect agent performance even when model weights stay fixed.</li><li>Improving a weaker executor’s harness can sometimes close or reverse a model capability gap on a benchmark.</li><li>Scoped candidates, composition and the reusable library each contribute in ablations.</li></ul>
+  <div class="warning"><b>What you should not conclude:</b> These are benchmark results on selected tasks, models and configurations—not a guarantee of improvement on your production workload. The method adds inference and execution cost, and the authors report regressions caused by poor selection, restrictive edits and noisy evidence.</div>
+  <div class="recommend"><b>Recommendation:</b> Reproduce a baseline on your own task distribution. Track task success, regression rate, tool errors, latency, tokens and total cost—not just the best-case score.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#S3">Paper §3–4 ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="9" data-cat="evaluation" data-search="limitations compute cost stochasticity shared model bias transferability library scaling adaptive recursion no guarantee">
+ <div class="lesson-head"><div class="n">09</div><div><div class="lt">Limitations, failure modes and open questions</div><div class="ls">Where recursive harnessing can go wrong</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>Problem statement</h4><p>Recursive improvement can create an illusion of learning: the agent may mistake random variation for an edit effect, preserve a misleading lesson, or spend more compute than the improvement is worth.</p>
+  <h4>Limitations identified by the paper</h4><ul><li><b>Extra cost:</b> baseline runs, candidate probes, composition and reflection all add inference and execution work.</li><li><b>Noisy evidence:</b> stochastic rollouts and shared model biases weaken causal attribution.</li><li><b>Transfer is uncertain:</b> an edit that helps one task may not help another, even in the same domain.</li><li><b>Selection can fail:</b> the selected deliverable may be weaker or narrower than another candidate.</li><li><b>Library growth:</b> old or overlapping experiences can make retrieval noisy unless consolidated and maintained.</li><li><b>Fixed recursion budget:</b> the current framework specifies recursion mode and k in advance rather than dynamically deciding when to stop.</li></ul>
+  <h4>Potential improvements</h4><p>Use repeated probes for high-stakes changes, independent evaluation where available, explicit confidence and evidence links, regression tests, library expiry/versioning, and budget-aware stopping when new probes stop adding useful evidence.</p>
+  <div class="recommend"><b>Recommendation:</b> In production, do not let a self-improving agent promote changes directly to its live harness. Use candidate → sandbox → evaluation → human or policy gate → versioned rollout → rollback.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://arxiv.org/html/2610.14224#A6">Paper Limitations ↗</a></div>
+ </div>
+</article>
+
+<article class="lesson" data-id="10" data-cat="engineering" data-search="repository install python 3.12 uv Linux OpenCode Codex benchmark demo dry run setup command practical run">
+ <div class="lesson-head"><div class="n">10</div><div><div class="lt">How to explore the actual Harness² repository</div><div class="ls">A safe learning path from reading to running the demo</div></div><div class="arrow">⌄</div></div>
+ <div class="body">
+  <h4>What the repository provides</h4><p>The release implements parallel and sequential recursion, supports OpenCode and Codex executors, and includes benchmark integrations for JobBench, LAB and WorkBuddy-Bench. Its deterministic local demo can exercise both recursion modes without model credentials.</p>
+  <h4>Prerequisites and local demo</h4><p>The README specifies Linux, Python 3.12 and <code>uv</code> for the basic setup:</p>
+  <pre><code>uv venv --python 3.12 .venv
+source .venv/bin/activate
+uv pip install -e '.[render]'
+harness2-demo --output runs/demo --k 2</code></pre>
+  <h4>Model-backed benchmark run</h4><p>For real benchmark execution, the README additionally lists Node.js 20+, Google Cloud CLI, model configuration and authentication. LAB and WorkBuddy have extra dependencies. Model-backed runs incur API costs, so start with one task and use dry-run to inspect selection.</p>
+  <pre><code>cp .env.example .env
+# Configure Vertex AI project and model IDs
+gcloud auth application-default login
+
+harness2-setup lab
+harness2-check --bench lab
+harness2 --bench lab --k 1 --mode parallel \\
+  --only-domains antitrust-competition --max-tasks 1
+harness2-judge --bench lab --k 1 --mode parallel
+harness2-report --bench lab --k 1 --mode parallel</code></pre>
+  <p class="muted" style="font-size:13px">The judge/report commands must match the run’s benchmark, executor, subset, k, mode and seed. Check current repository docs before running because dependencies and interfaces can change.</p>
+  <h4>Important operational warning</h4><p>The README states executor network access is unrestricted by default and the Codex executor is run with its sandbox disabled. The project warns that public benchmark rubrics may be reachable online and recommends configuring network restrictions before evaluation to prevent access to benchmark answers or grading criteria.</p>
+  <div class="warning"><b>Do not point this at production credentials or sensitive systems as a first experiment.</b> Start in a disposable environment with restricted secrets, network egress and filesystem permissions.</div>
+  <div class="recommend"><b>Recommendation:</b> First run the deterministic demo and inspect its run artifacts. Then read the setup, experiment and results/resume docs. Only after you understand the execution boundaries should you configure a model-backed benchmark.</div>
+  <div class="lesson-foot"><a target="_blank" href="https://github.com/google-research/harness2#install">Repository install ↗</a> · <a target="_blank" href="https://github.com/google-research/harness2#run-a-benchmark">Benchmark guide ↗</a></div>
+ </div>
+</article>
+</div>
+
+<section class="card view-panel" id="checklist" data-panel="checklist">
+ <h2>Production-readiness checklist</h2>
+ <p class="muted">Use this before allowing an agent to modify its own operating instructions or tools.</p>
+ <div class="checks" id="checks">
+  <label id="check-item-1"><input type="checkbox"> Baseline tasks and outcomes are reproducible enough to compare.</label>
+  <label id="check-item-2"><input type="checkbox"> Candidate executions run in an isolated, least-privilege environment.</label>
+  <label id="check-item-3"><input type="checkbox"> Every proposed edit links to a concrete trajectory observation.</label>
+  <label id="check-item-4"><input type="checkbox"> Task-specific facts are re-verified before reuse.</label>
+  <label id="check-item-5"><input type="checkbox"> Harness files, scripts, skills and plugins pass structural validation.</label>
+  <label id="check-item-6"><input type="checkbox"> Candidate changes are checked for regressions and deliverable conformance.</label>
+  <label id="check-item-7"><input type="checkbox"> The experience library stores evidence, scope and confidence.</label>
+  <label id="check-item-8"><input type="checkbox"> Model-call, runtime and tool budgets have explicit limits.</label>
+  <label id="check-item-9"><input type="checkbox"> Promotion requires a gate, and rollback is possible.</label>
+  <label id="check-item-10"><input type="checkbox"> Secrets, network access and untrusted artifact execution are controlled.</label>
+ </div>
+</section>
+
+<section class="card view-panel" id="takeaway" data-panel="takeaway">
+ <h2>My overall take</h2>
+ <p class="lead">The strongest idea in Harness² is not self-editing prompts. It is evidence-backed improvement of the improvement process itself.</p>
+ <p>The key architectural contribution is the separation of (1) task-specific harness refinement and (2) cross-task learning about how to refine. The Propose–Probe–Compose mechanism gives a practical way to compare candidate harness behavior when direct ground-truth feedback is unavailable. The library then attempts to convert those local experiments into reusable experience.</p>
+ <div class="recommend"><b>What I would learn deeply:</b> the distinction between the two harnesses; how Propose–Probe–Compose works; why invariant and domain-specific proposals are separated; parallel vs sequential recursion; how the experience library avoids blindly inheriting task-specific harnesses; and the limitations of behavioral evidence.</div>
+ <div class="warning"><b>What I would not copy blindly:</b> unrestricted execution permissions, automatic adoption of self-authored plugins/scripts, or the assumption that better-looking trajectories imply correct outcomes. Production systems need stronger independent verification and governance.</div>
+</section>
+
+
+<section class="card view-panel" id="practice" data-panel="practice" style="margin-top:20px">
+ <h2>Practice tasks: learn Harness² by building small pieces</h2>
+ <p class="muted">Do these in order. They are deliberately small: each exercise isolates one idea, requires no model fine-tuning, and can be done with a toy agent or even a scripted mock. The goal is to understand the mechanics before attempting full recursive harnessing.</p> 
+ <p class="muted"><b>Recommended sequence:</b> complete P1–P2 after Lessons 1–3, P3–P4 after Lessons 4–7, and P5 after Lessons 8–10. You can also complete all five tasks after reading the guide.</p>
+ <div class="warning"><b>Practice rule:</b> Do not let an agent automatically edit its live instructions or execute generated scripts. Work on copies, record every diff and manually approve changes.</div>
+
+ <div class="lesson-list" id="practiceLessons">
+  <article class="lesson practice-task">
+   <div class="lesson-head"><div class="n">P1</div><div><div class="lt">Build a baseline harness and record a trajectory</div><div class="ls">20–30 minutes · Understand what is being improved</div></div><div class="arrow">⌄</div></div>
+   <div class="body">
+    <h4>Task</h4><p>Create a tiny agent that answers questions about a small local folder of 3–5 text files. Give it a system instruction and two tools: list files and read a file. Ask it a question that requires reading more than one file.</p>
+    <h4>Record</h4><ul><li>Its initial instructions and available tools.</li><li>The sequence of tool calls and their outputs.</li><li>The final answer and any unsupported claims.</li><li>Where it wasted time, missed information or made an incorrect assumption.</li></ul>
+    <h4>What you should learn</h4><p>The execution harness is more than a prompt. It includes the tools and the environment, and the trajectory is evidence of how the harness behaved.</p>
+    <div class="recommend"><b>Deliverable:</b> <code>baseline.md</code> with the task, harness version, tool-call trace and observed weakness.</div>
+   </div>
+  </article>
+
+  <article class="lesson practice-task">
+   <div class="lesson-head"><div class="n">P2</div><div><div class="lt">Run a manual Propose–Probe–Compose experiment</div><div class="ls">30–45 minutes · Understand the core algorithm</div></div><div class="arrow">⌄</div></div>
+   <div class="body">
+    <h4>Task</h4><p>Use the weakness found in P1. For example, the agent forgets to inspect all relevant files before answering. Create two candidate harness edits:</p>
+    <ul><li><b>Invariant edit:</b> a general instruction to plan the information needed and verify coverage before answering.</li><li><b>Task/domain edit:</b> a file-research procedure that searches filenames, reads likely matches and cross-checks evidence.</li></ul>
+    <h4>Probe</h4><p>Run the same task with the baseline and each candidate. Keep the model, task, tools and environment the same. Compare tool calls, evidence coverage, final answer quality and unnecessary work.</p>
+    <h4>Compose</h4><p>Choose the edit that is supported by the run evidence. If both help and do not conflict, combine them. If neither helps, keep the baseline. Write down why.</p>
+    <div class="recommend"><b>Deliverable:</b> A one-page comparison table with baseline, candidate A, candidate B, observed difference and composition decision.</div>
+   </div>
+  </article>
+
+  <article class="lesson practice-task">
+   <div class="lesson-head"><div class="n">P3</div><div><div class="lt">Create an experience library for future tasks</div><div class="ls">25–35 minutes · Understand harnessing-level recursion</div></div><div class="arrow">⌄</div></div>
+   <div class="body">
+    <h4>Task</h4><p>Take the evidence and decision from P2. Write an <code>EXPERIENCE.md</code> entry with four fields:</p>
+    <ul><li><b>When it applies:</b> the task cue or situation.</li><li><b>Observed problem:</b> what the baseline did.</li><li><b>Reusable lesson:</b> the instruction or procedure that helped.</li><li><b>Evidence:</b> which run and what difference supported the lesson.</li></ul>
+    <h4>Probe transfer</h4><p>Create a second, slightly different question over the same folder. Start from the original baseline harness, retrieve the relevant experience and decide whether to adapt the lesson. Do not blindly copy the entire previous task harness.</p>
+    <div class="recommend"><b>Deliverable:</b> One experience entry and a short note explaining whether it transferred to the second task.</div>
+   </div>
+  </article>
+
+  <article class="lesson practice-task">
+   <div class="lesson-head"><div class="n">P4</div><div><div class="lt">Try parallel and sequential refinement on paper</div><div class="ls">20–30 minutes · Understand width vs depth without extra compute</div></div><div class="arrow">⌄</div></div>
+   <div class="body">
+    <h4>Task</h4><p>Use one task and invent three plausible harness edits. Draw two strategies:</p>
+    <ul><li><b>Parallel:</b> test all three from the same baseline, then compare and compose.</li><li><b>Sequential:</b> test one edit, carry the refined harness forward, then test the next edit against the new state.</li></ul>
+    <h4>Think through</h4><p>What happens if edit 1 is wrong? Which strategy explores more alternatives? Which can build on a useful earlier change? Where could an early mistake contaminate later steps?</p>
+    <div class="recommend"><b>Deliverable:</b> A simple diagram and a paragraph describing when you would choose each strategy.</div>
+   </div>
+  </article>
+
+  <article class="lesson practice-task">
+   <div class="lesson-head"><div class="n">P5</div><div><div class="lt">Map Harness² to your incident root-cause agent</div><div class="ls">45–60 minutes · Connect the paper to a realistic engineering system</div></div><div class="arrow">⌄</div></div>
+   <div class="body">
+    <h4>Task</h4><p>Take one historical alert or a synthetic incident. Write down the baseline agent's investigation steps: alert context, service identification, logs, traces, recent deployments, hypotheses, evidence and final Slack summary.</p>
+    <h4>Choose one failure to improve</h4><ul><li>It queries logs with an excessively broad time range.</li><li>It misses correlation with a recent deployment.</li><li>It jumps to a root cause from one weak signal.</li><li>It posts a conclusion without linking supporting evidence.</li></ul>
+    <h4>Design the experiment</h4><p>Choose the right harness component (tool guidance, skill, script or guardrail). Replay the same incident against baseline and candidate. Compare evidence coverage, false positives, diagnosis quality, time-to-diagnosis and cost. Record a reusable lesson only if the evidence supports it.</p>
+    <div class="warning"><b>Safety boundary:</b> Use historical or synthetic incidents, read-only telemetry and a mock Slack destination. Do not let the experiment run remediation or post to a real incident channel.</div>
+    <div class="recommend"><b>Deliverable:</b> A mini Harness² design: baseline trace, proposed edit, replay comparison, adoption decision and one experience-library entry.</div>
+   </div>
+  </article>
+ </div>
+ <div class="callout"><b>Suggested order:</b> P1 → P2 → P3 first. Those three give you the essential Harness² mental model. P4 reinforces the recursion strategies. P5 is the bridge to a portfolio-quality engineering project.</div>
+</section>
+
+</div><!-- /.reading-column -->
+</main>
+<footer class="source-footer">
+ Guide synthesized from the <a href="https://github.com/google-research/harness2" target="_blank" rel="noopener">Harness² repository</a> and the <a href="https://arxiv.org/html/2610.14224" target="_blank" rel="noopener">Harness² research paper (arXiv:2610.14224)</a>. Results and implementation details reflect the cited paper/repository; this guide is an explanatory interpretation, not an official Google document.
+</footer>
+<script>
+(()=>{
+ const root=document.documentElement;
+ const lessons=[...document.querySelectorAll('.lesson[data-id]')];
+ const practice=[...document.querySelectorAll('.practice-task')];
+
+ function setSection(section){
+  document.getElementById('introPanel').classList.add('hidden');
+  document.querySelectorAll('[data-panel]').forEach(el=>el.classList.toggle('active',el.dataset.panel===section));
+  document.querySelectorAll('.section-tab').forEach(el=>el.classList.toggle('active',el.dataset.section===section));
+  document.querySelectorAll('.nav-context').forEach(el=>el.hidden=el.dataset.index!==section);
+  document.querySelectorAll('.nav-subitem').forEach(el=>el.classList.remove('active'));
+  // Reset subsection visibility whenever the user changes top-level sections.
+  if(section==='learning'){
+   document.getElementById('guidePrompt').classList.add('hidden');
+   lessons.forEach(x=>{x.classList.add('hidden');x.classList.remove('open')});
+  }
+  if(section==='practice'){
+   practice.forEach(x=>{x.classList.remove('hidden');x.classList.remove('open')});
+   const title=document.querySelector('#practice > h2');
+   if(title) title.textContent='Practice tasks: learn Harness² by building small pieces';
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+ }
+ function showIntro(){
+  setSection('learning');
+  document.getElementById('introPanel').classList.remove('hidden');
+  const link=document.querySelector('[data-intro]');
+  if(link)link.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+ }
+ function showLesson(id){
+  setSection('learning');
+  document.getElementById('introPanel').classList.add('hidden');
+  document.getElementById('guidePrompt').classList.add('hidden');
+  lessons.forEach(x=>{const selected=x.dataset.id===String(id);x.classList.toggle('hidden',!selected);x.classList.toggle('open',selected)});
+  const link=document.querySelector('[data-lesson="'+id+'"]');if(link)link.classList.add('active');
+ }
+ function showPractice(index){
+  setSection('practice');
+  practice.forEach((x,i)=>{
+   const selected=i===Number(index);
+   x.classList.toggle('hidden',!selected);
+   x.classList.toggle('open',selected);
+   const head=x.querySelector('.lesson-head');
+   if(head)head.setAttribute('aria-expanded',selected?'true':'false');
+  });
+  const link=document.querySelector('[data-practice="'+index+'"]');if(link)link.classList.add('active');
+  const title=document.querySelector('#practice > h2');
+  if(title)title.textContent='Practice task · '+(Number(index)+1)+' of '+practice.length;
+  window.scrollTo({top:0,behavior:'smooth'});
+ }
+ document.querySelectorAll('[data-section]').forEach(el=>el.addEventListener('click',()=>{
+  if(el.dataset.section==='learning') showIntro();
+  else setSection(el.dataset.section);
+ }));
+ document.querySelectorAll('[data-intro]').forEach(el=>el.addEventListener('click',showIntro));
+ document.querySelectorAll('[data-lesson]').forEach(el=>el.addEventListener('click',()=>showLesson(el.dataset.lesson)));
+ document.querySelectorAll('[data-practice]').forEach(el=>el.addEventListener('click',()=>showPractice(el.dataset.practice)));
+ // Practice task cards use their header/chevron as working expand-collapse controls.
+ practice.forEach((task,index)=>{
+  const head=task.querySelector('.lesson-head');
+  if(!head)return;
+  head.setAttribute('role','button');
+  head.setAttribute('tabindex','0');
+  head.setAttribute('aria-controls','practice-task-body-'+index);
+  head.setAttribute('aria-expanded',task.classList.contains('open')?'true':'false');
+  const body=task.querySelector('.body');
+  if(body)body.id='practice-task-body-'+index;
+  const toggle=()=>{
+   const opening=!task.classList.contains('open');
+   task.classList.toggle('open',opening);
+   head.setAttribute('aria-expanded',opening?'true':'false');
+   if(opening)task.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+  head.addEventListener('click',toggle);
+  head.addEventListener('keydown',event=>{
+   if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle()}
+  });
+ });
+ document.querySelectorAll('[data-check]').forEach(el=>el.addEventListener('click',()=>{
+  setSection('checklist');
+  document.querySelectorAll('[data-check]').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');
+  const target=document.getElementById('check-item-'+(Number(el.dataset.check)+1));
+  if(target)target.scrollIntoView({behavior:'smooth',block:'center'});
+ }));
+
+ // Fixed dark theme; theme switching has been removed.
+ root.dataset.theme='dark';
+ document.body.dataset.theme='dark';
+
+ // Search across the introduction, lessons, practice tasks, checklist and takeaways.
+ const searchInput=document.getElementById('guideSearch');
+ const searchResults=document.getElementById('searchResults');
+ function buildSearchIndex(){
+  const items=[];
+  const intro=document.getElementById('introPanel');
+  items.push({title:'00 · Introduction',section:'Learning guide',text:intro.innerText,open:()=>showIntro()});
+  lessons.forEach((el,i)=>{
+   const id=el.dataset.id;
+   const nav=document.querySelector('[data-lesson="'+id+'"]');
+   items.push({title:nav?nav.textContent.trim():'Lesson '+(i+1),section:'Learning guide',text:el.innerText,open:()=>showLesson(id)});
+  });
+  practice.forEach((el,i)=>{
+   const nav=document.querySelector('[data-practice="'+i+'"]');
+   items.push({title:nav?nav.textContent.trim():'Practice task '+(i+1),section:'Practice tasks',text:el.innerText,open:()=>showPractice(i)});
+  });
+  document.querySelectorAll('#checks label').forEach((el,i)=>{
+   items.push({title:'Checklist '+(i+1),section:'Production checklist',text:el.innerText,open:()=>{
+    setSection('checklist');
+    const target=document.getElementById('check-item-'+(i+1));
+    if(target)target.scrollIntoView({behavior:'smooth',block:'center'});
+   }});
+  });
+  const takeaway=document.getElementById('takeaway');
+  items.push({title:'Key takeaways',section:'Key takeaways',text:takeaway.innerText,open:()=>setSection('takeaway')});
+  return items;
+ }
+ const searchIndex=buildSearchIndex();
+ function renderSearchResults(){
+  const query=searchInput.value.trim().toLowerCase();
+  searchResults.replaceChildren();
+  if(!query){searchResults.hidden=true;return}
+  const matches=searchIndex.filter(item=>(item.title+' '+item.text).toLowerCase().includes(query)).slice(0,10);
+  if(!matches.length){
+   const empty=document.createElement('div');empty.className='search-empty';empty.textContent='No matches found. Try another keyword.';searchResults.appendChild(empty);
+  }else{
+   matches.forEach(item=>{
+    const button=document.createElement('button');button.type='button';button.className='search-result';button.setAttribute('role','option');
+    const title=document.createElement('strong');title.textContent=item.title;
+    const meta=document.createElement('small');meta.textContent=item.section;
+    button.append(title,meta);
+    button.addEventListener('click',()=>{item.open();searchResults.hidden=true;searchInput.value='';searchInput.blur()});
+    searchResults.appendChild(button);
+   });
+  }
+  searchResults.hidden=false;
+ }
+ searchInput.addEventListener('input',renderSearchResults);
+ searchInput.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){searchResults.hidden=true;searchInput.blur()}
+  if(event.key==='Enter'){
+   const first=searchResults.querySelector('button');
+   if(first)first.click();
+  }
+ });
+ document.addEventListener('click',event=>{
+  if(!event.target.closest('.guide-search-wrap'))searchResults.hidden=true;
+ });
+
+ // Start in the Learning guide; all lesson details stay closed until chosen from the index.
+ lessons.forEach(x=>{x.classList.remove('open');x.classList.add('hidden')});
+ practice.forEach(x=>{x.classList.remove('open');x.classList.add('hidden')});
+ showIntro();
+})();
+</script>
+</body></html>
